@@ -1,0 +1,13 @@
+env
+venv
+db.*
+*.db
+vscode
+.vscode
+__pycache__
+**__pycache__
+**/__pycache__
+
+
+
+
