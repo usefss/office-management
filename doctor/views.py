@@ -24,9 +24,48 @@ from random import randint
 from .serializers import SetDoctorVisitSerializer, GetVisitorsParams
 
 
+class GetComments(APIView):
+    @extend_schema()
+    def get(self, request):
+        """
+            MOCKED API
+            request: empty
+            response: 
+            [
+                {
+                    vistor_id: FakeInt,
+                    comment: text,
+                    id: FakeInt,
+                    created_at: DateTime,
+                },
+                ...
+            ]
+        """
+        pass
+
+
+class OfficeInfo(APIView):
+    @extend_schema()
+    def patch(self, request):
+        """
+            MOCKED API
+            request: 
+            {
+                address: text,
+                phone_number: int,
+                ...
+            }
+            response: get created data plus id and created_at
+            {
+                ...
+            }
+        """
+        pass
+
+
 class DoctorsVisitors(APIView):
     @extend_schema(
-        parameters=GetVisitorsParams,
+        parameters=[GetVisitorsParams],
     )
     def get(self, request):
         """
