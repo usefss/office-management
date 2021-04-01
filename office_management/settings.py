@@ -38,6 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'identity',
+    'patient',
+    'doctor',
+
     'rest_framework',
     'drf_spectacular',
 ]
@@ -52,6 +56,8 @@ REST_FRAMEWORK = {
 
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
+
+AUTH_USER_MODEL = 'identity.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
