@@ -70,7 +70,7 @@ class DoctorsVisitors(APIView):
     def get(self, request):
         """
                 MOCKED API
-                request: doctor demands geting list of visitors for a day
+                request: doctor demands geting list of visitors for a day | /api/get/?date=1222/12/
                 param: :date
                 response: gets a list of visitors
                 [
