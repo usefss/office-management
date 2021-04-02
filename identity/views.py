@@ -9,3 +9,5 @@
         - get doctors list filters by city, expertise, degree |A: anybody
         - patient can edit self information like name, family, phone
 """
+
+# class signUsersAPI(BaseAPI)

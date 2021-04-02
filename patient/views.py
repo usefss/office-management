@@ -26,13 +26,13 @@ class PatientVisitingAPI(BaseAPI):
 
 class DoctorCommentAPI(BaseAPI):
     lookup_field = 'id'
-    permission_classes = [PatientPermission]
+    permission_classes = [PatientPermission, ]
     queryset = DoctorComment.objects.all()
     serializer_class = DoctorCommentSerializer
 
 
 class FavoriteDoctorAPI(BaseAPI):
     lookup_field = 'id'
-    permission_classes = [PatientPermission]
+    permission_classes = [PatientPermission, ]
     queryset = FavoriteDoctor.objects.all()
     serializer_class = FavoriteDoctorSerializer

@@ -1,16 +1,16 @@
 
 """
     API services needed here are:
-        - doctor sets work days and times in every days
+        - doctor sets work days and times in every days  //done
             A doctor has infinite days from signup or should he or she specify every day??
-            1- infinite days: every day and its active time is a recourd in database and has a relation with 
+            1- infinite days: every day and its active time is a record in database and has a relation with
                 some other models so it is very hard to implement
-            2- Doctor must clearify every day and time of visitations --> simple 
-        - doctor can see visiting times set by patients
+            2- Doctor must clarify every day and time of visitations --> simple
+        - doctor can see visiting times set by patients  //done
             A doctor has multiple patients for every day he is accepting visitors
 
         - change office information
-        - see self comments
+        - see self comments  //done
         * doctor has access over just self information not others
 """
 
@@ -21,11 +21,13 @@ from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
 from random import randint
 
-from .serializers import SetDoctorVisitSerializer, GetVisitorsParams
+from .serializers import SetDoctorVisitSerializer, GetVisitorsParams, OfficeInfo, GetComments
 
 
 class GetComments(APIView):
-    @extend_schema()
+    @extend_schema(
+        parameters=[GetComments],
+    )
     def get(self, request):
         """
             MOCKED API
@@ -33,7 +35,7 @@ class GetComments(APIView):
             response: 
             [
                 {
-                    vistor_id: FakeInt,
+                    # vistor_id: FakeInt,
                     comment: text,
                     id: FakeInt,
                     created_at: DateTime,
@@ -41,11 +43,21 @@ class GetComments(APIView):
                 ...
             ]
         """
-        pass
+        param_serializer = GetComments(request.GET)
+        param_serializer.is_valid(raise_exception=True)
+        return Response([
+        {
+            'comment':  "I don't Know",
+            'id': randint(1, 100),
+            'created_at': timezone.now(),
+        }
+        ])
 
 
-class OfficeInfo(APIView):
-    @extend_schema()
+class ChangeOfficeInfo(APIView):
+    @extend_schema(
+        parameters=OfficeInfo,
+    )
     def patch(self, request):
         """
             MOCKED API
@@ -53,14 +65,22 @@ class OfficeInfo(APIView):
             {
                 address: text,
                 phone_number: int,
-                ...
             }
-            response: get created data plus id and created_at
+            response: gets a json object of inserted information
             {
-                ...
+                address : text,
+                phone_number : int,
+                changed_at : DateTime,
             }
         """
-        pass
+        serializer = OfficeInfo(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(
+        {
+            **serializer.data,
+            'changed_at': timezone.now(),
+        })
+
 
 
 class DoctorsVisitors(APIView):
@@ -70,7 +90,7 @@ class DoctorsVisitors(APIView):
     def get(self, request):
         """
                 MOCKED API
-                request: doctor demands geting list of visitors for a day | /api/get/?date=1222/12/
+                request: doctor demands getting list of visitors for a day | /api/get/?date=1222/12/
                 param: :date
                 response: gets a list of visitors
                 [
@@ -107,7 +127,7 @@ class SetDoctorVisitAPI(APIView):
     def post(self, request):
         """
             MOCKED API
-            request: doctor sends :day, :from_time, :to_time to create a recourd in database
+            request: doctor sends :day, :from_time, :to_time to create a record in database
             {
                 date: DateTime,
                 from_time: Time,
