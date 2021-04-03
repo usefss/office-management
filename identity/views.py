@@ -16,11 +16,16 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from doctor.views import GetComments
-from identity.serializer import SearchDoctorSerializer, signUpUserSerializer, PatientInfoChangeSerializer
+from identity.serializer import (
+    SearchDoctorSerializer, signUpUserSerializer, PatientInfoChangeSerializer,
+    signUpDoctorSerializer,
+)
 
 
 class SignUpUser(APIView):
-    @extend_schema()
+    @extend_schema(
+        request=signUpUserSerializer,
+    )
     def post(self, request):
         """
             MOCKED API
@@ -40,19 +45,52 @@ class SignUpUser(APIView):
                 }
             ]
         """
-        param_serializer = signUpUserSerializer(request.GET)
+        param_serializer = signUpUserSerializer(data=request.data)
         param_serializer.is_valid(raise_exception=True)
         return Response([
-        {
-            'status_message':  randint(1, 100),
-            'created_at': timezone.now(),
-        }
+            {
+                'id':  randint(1, 100),
+                'created_at': timezone.now(),
+            }
+        ])
+
+
+class SignUpDoctor(APIView):
+    @extend_schema(
+        request=signUpDoctorSerializer,
+    )
+    def post(self, request):
+        """
+            MOCKED API
+            request:
+            [
+                {
+                    'name' : text,
+                    'phone_number' : text,
+                    'email' : text,
+                },
+            ]
+            response:
+            [
+                {
+                    'status_message' : text,
+                    'created_at' : DateTime,
+                }
+            ]
+        """
+        param_serializer = signUpDoctorSerializer(data=request.data)
+        param_serializer.is_valid(raise_exception=True)
+        return Response([
+            {
+                'id':  randint(1, 100),
+                'created_at': timezone.now(),
+            }
         ])
 
 
 class DoctorSearch(APIView):
     @extend_schema(
-        request=[SearchDoctorSerializer],
+        parameters=[SearchDoctorSerializer],
     )
     def get(self, request):
         """
@@ -75,9 +113,11 @@ class DoctorSearch(APIView):
         """
         return Response([
             {
-               'name': randint(1, 100),
+                'id': randint(1, 100),
+                'name': 'doctor' + str(randint(1, 100)),
             }
         ])
+
 
 class PatientInfoChange(APIView):
     @extend_schema(
@@ -101,5 +141,6 @@ class PatientInfoChange(APIView):
         return Response(
             {
                 **serializer.data,
-                'changed_at': timezone.now(),
+                'updated_at': timezone.now(),
+                'id': randint(1, 100),
             })

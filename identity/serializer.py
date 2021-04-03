@@ -6,23 +6,19 @@ class signUpUserSerializer(serializers.Serializer):
     phone_number = serializers.CharField()
     email = serializers.CharField()
 
+
+class signUpDoctorSerializer(signUpUserSerializer):
+    doctor_phone = serializers.CharField()
+    doctor_number = serializers.CharField()
+
+
 class SearchDoctorSerializer(serializers.Serializer):
-    name = serializers.CharField()
-    city = serializers.CharField()
-    expertise = serializers.CharField()
-    degree = serializers.CharField()
+    name = serializers.CharField(required=False)
+    city = serializers.CharField(required=False)
+    expertise = serializers.CharField(required=False)
+    degree = serializers.CharField(required=False)
+
 
 class PatientInfoChangeSerializer(serializers.Serializer):
     name = serializers.CharField()
     phone_number = serializers.CharField()
-
-
-
-
-
-
-
-
-
-
-
