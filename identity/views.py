@@ -8,55 +8,98 @@
         - get doctors list filters by city, expertise, degree |A: anybody
         - patient can edit self information like name, family, phone
 """
+from random import randint
+
+from django.utils import timezone
+from drf_spectacular.utils import extend_schema
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from doctor.views import GetComments
+from identity.serializer import SearchDoctorSerializer, signUpUserSerializer, PatientInfoChangeSerializer
+
+
 class SignUpUser(APIView):
-    @extend_schema(
-    )
-    def get(self, request):
+    @extend_schema()
+    def post(self, request):
         """
             MOCKED API
-            request: empty
+            request:
+            [
+                {
+                    'name' : text,
+                    'phone_number' : text,
+                    'email' : text,
+                },
+            ]
             response:
             [
                 {
-                    # vistor_id: FakeInt,
-                    comment: text,
-                    id: FakeInt,
-                    created_at: DateTime,
-                },
-                ...
+                    'status_message' : text,
+                    'created_at' : DateTime,
+                }
             ]
         """
-        param_serializer = GetComments(request.GET)
+        param_serializer = signUpUserSerializer(request.GET)
         param_serializer.is_valid(raise_exception=True)
         return Response([
         {
-            'comment':  "I don't Know",
-            'id': randint(1, 100),
+            'status_message':  randint(1, 100),
             'created_at': timezone.now(),
         }
         ])
 
 
+class DoctorSearch(APIView):
+    @extend_schema(
+        request=[SearchDoctorSerializer],
+    )
+    def get(self, request):
+        """
+            MOCKED API
+            request:
+            [
+                {
+                    'name' : text,
+                    'city' : text,
+                    'expertise' : text,
+                    'degree' : text,
+                },
+            ]
+            response:
+            [
+                {
+                    'name' : text,
+                },
+            ]
+        """
+        return Response([
+            {
+               'name': randint(1, 100),
+            }
+        ])
 
-
-
-
-
-
-
-# class SignUserAPI(BaseAPI):
-#     lookup_field = 'id'
-#     queryset = SignupUser.objects.all()
-#     serializer_class = SignUpUserSerializer
-#
-#
-# class SearchDoctorAPI(BaseAPI):
-#     lookup_field = 'id'
-#     queryset = SearchDoctor.objects.all()
-#     serializer_class = SearchDoctorSerializer
-#
-#
-# class ChangePatientInfoAPI(BaseAPI):
-#     lookup_field = 'id'
-#     queryset = ChangePatientInfo.objects.all()
-#     serializer_class = ChangePatientInfoSerializer
+class PatientInfoChange(APIView):
+    @extend_schema(
+        request=PatientInfoChangeSerializer,
+    )
+    def patch(self, request):
+        """
+            MOCKED API
+            request:
+            {
+                'name': text,
+                'phone_number': int,
+            }
+            response: gets a json object of inserted information
+            {
+                'created_at' : text,
+            }
+        """
+        serializer = PatientInfoChangeSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(
+            {
+                **serializer.data,
+                'changed_at': timezone.now(),
+            })

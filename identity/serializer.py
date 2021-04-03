@@ -1,22 +1,20 @@
 from rest_framework import serializers
 
-from identity.models import User, SearchDoctor, PatientInfo
-
 
 class signUpUserSerializer(serializers.Serializer):
-    class Meta:
-        model = User
-        fields = '__all__'
+    name = serializers.CharField()
+    phone_number = serializers.CharField()
+    email = serializers.CharField()
 
 class SearchDoctorSerializer(serializers.Serializer):
-    class Meta:
-        model = SearchDoctor
-        fields = '__all__'
+    name = serializers.CharField()
+    city = serializers.CharField()
+    expertise = serializers.CharField()
+    degree = serializers.CharField()
 
-class ChangePatientInfoSerializer(serializers.Serializer):
-    class Meta:
-        model = PatientInfo
-        fields = '__all__'
+class PatientInfoChangeSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    phone_number = serializers.CharField()
 
 
 
