@@ -21,7 +21,7 @@ from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
 from random import randint
 
-from .serializers import SetDoctorVisitSerializer, GetVisitorsParams, OfficeInfo, GetComments
+from .serializers import SetDoctorVisitSerializer, GetVisitorsParams, OfficeInfoSerializer
 
 
 class GetComments(APIView):
@@ -42,17 +42,17 @@ class GetComments(APIView):
             ]
         """
         return Response([
-        {
-            'comment':  "I don't Know",
-            'id': randint(1, 100),
-            'created_at': timezone.now(),
-        }
+            {
+                'comment':  "I don't Know",
+                'id': randint(1, 100),
+                'created_at': timezone.now(),
+            }
         ])
 
 
 class ChangeOfficeInfo(APIView):
     @extend_schema(
-        parameters=OfficeInfo,
+        request=OfficeInfoSerializer,
     )
     def patch(self, request):
         """
@@ -72,11 +72,10 @@ class ChangeOfficeInfo(APIView):
         serializer = OfficeInfoSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         return Response(
-        {
-            **serializer.data,
-            'changed_at': timezone.now(),
-        })
-
+            {
+                **serializer.data,
+                'changed_at': timezone.now(),
+            })
 
 
 class DoctorsVisitors(APIView):
