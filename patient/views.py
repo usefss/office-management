@@ -16,20 +16,17 @@ from .serializers import (
 )
 from permissions import PatientPermission
 
-
 class PatientVisitingAPI(BaseAPI):
     lookup_field = 'id'
     permission_classes = [PatientPermission, ]
     queryset = PatientVisiting.objects.all()
     serializer_class = PatientVisitingSerializer
 
-
 class DoctorCommentAPI(BaseAPI):
     lookup_field = 'id'
     permission_classes = [PatientPermission, ]
     queryset = DoctorComment.objects.all()
     serializer_class = DoctorCommentSerializer
-
 
 class FavoriteDoctorAPI(BaseAPI):
     lookup_field = 'id'

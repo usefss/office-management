@@ -9,7 +9,7 @@
         - doctor can see visiting times set by patients  //done
             A doctor has multiple patients for every day he is accepting visitors
 
-        - change office information
+        - change office information //done
         - see self comments  //done
         * doctor has access over just self information not others
 """
@@ -25,9 +25,7 @@ from .serializers import SetDoctorVisitSerializer, GetVisitorsParams, OfficeInfo
 
 
 class GetComments(APIView):
-    @extend_schema(
-        parameters=[GetComments],
-    )
+    @extend_schema()
     def get(self, request):
         """
             MOCKED API
@@ -43,8 +41,6 @@ class GetComments(APIView):
                 ...
             ]
         """
-        param_serializer = GetComments(request.GET)
-        param_serializer.is_valid(raise_exception=True)
         return Response([
         {
             'comment':  "I don't Know",
@@ -73,7 +69,7 @@ class ChangeOfficeInfo(APIView):
                 changed_at : DateTime,
             }
         """
-        serializer = OfficeInfo(data=request.data)
+        serializer = OfficeInfoSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         return Response(
         {
